@@ -1,26 +1,29 @@
-var webpack = require('webpack');
-var path = require('path');
+const webpack = require('webpack');
+const path = require('path');
 
-var BUILD_DIR = path.resolve(__dirname, 'src/client/public');
-var APP_DIR = path.resolve(__dirname, 'src/client/app');
-
-var config = {
-    entry: APP_DIR + '/index.jsx',
+module.exports = {
+    entry: [
+        'react-hot-loader/patch',
+        './src/app.js',
+    ],
     output: {
-        path: BUILD_DIR,
-        filename: 'bundle.js'
+        path: path.resolve(__dirname, './build'),
+        filename: 'app.bundle.js',
     },
     module: {
         loaders: [
             {
-                test: /\.jsx?/,
-                include: APP_DIR,
-                loader: 'babel-loader'
-      }
-    ]
-    }
+                test: /\.html$/,
+                loader: 'file-loader?name=[name].[ext]',
+            },
+            {
+                test: /\.jsx?$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+            },
+        ],
+    },
+    plugins: [
+        new webpack.NamedModulesPlugin(),
+    ],
 };
-
-
-
-module.exports = config;
